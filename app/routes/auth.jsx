@@ -1,71 +1,126 @@
-// import axios from 'axios';
-// import { redirect } from 'react-router';
+import { redirect } from 'react-router';
 import AuthForm from '../components/auth/AuthForm';
-// import {
-//   hasMinLength,
-//   isEqualsToOtherValue,
-//   isNotEmpty,
-// } from '../util/validation';
+import {
+  hasMinLength,
+  isEqualsToOtherValue,
+  isNotEmpty,
+  isValidPhoneNumber,
+} from '../util/validation';
+import { performHourlyTask } from '../util/Tokens';
 
 export default function AuthenticationPage() {
   return <AuthForm />;
 }
 
-// export async function action({ request }) {
-//   const searchParams = new URL(request.url).searchParams;
-//   const mode = searchParams.get('mode') || 'login';
+export async function clientAction({ request }) {
+  const searchParams = new URL(request.url).searchParams;
+  const mode = searchParams.get('mode') || 'login';
 
-//   if (mode !== 'login' && mode !== 'signup') {
-//     throw json({ message: 'Unsupported mode.' }, { status: 422 });
-//   }
+  if (mode !== 'login' && mode !== 'signup') {
+    return { message: ['Unsupported mode.'], status: 422 };
+  }
 
-//   const data = await request.formData();
-//   const email = data.get('email');
-//   const password = data.get('password');
-//   if (!isNotEmpty(email))
-//     return json({ message: 'email is empty.' }, { status: 500 });
-//   if (!hasMinLength(password, 6))
-//     return json({ message: 'Password is Short.' }, { status: 500 });
-//   if (mode === 'signup') {
-//     const passConfirm = data.get('password-confirmation');
-//     if (!isEqualsToOtherValue(password, passConfirm))
-//       return json(
-//         { message: 'The Password and the Password-confirmation is not equal.' },
-//         { status: 500 }
-//       );
-//   }
+  let errorMessages = [];
 
-//   const authData = {
-//     email,
-//     password,
-//   };
+  const data = await request.formData();
+  const email = data.get('email');
+  const password = data.get('password');
+  if (!isNotEmpty(email)) errorMessages.push('email is not Valid.');
+  if (!hasMinLength(password, 8)) errorMessages.push('Password is Short.');
 
-//   const res = await axios.post(`http://localhost:3001/auth/${mode}`, authData);
+  let authData = {
+    email,
+    password,
+  };
 
-//   if (res.data.status === 422 || res.data.status === 401) {
-//     console.log(res.data);
-//     return res.data;
-//   }
+  if (mode === 'signup') {
+    const passConfirm = data.get('password-confirmation');
+    if (!isEqualsToOtherValue(password, passConfirm))
+      errorMessages.push(
+        'The Password and the Password-confirmation is not equal.'
+      );
 
-//   const resOK = res && res.data.status === 200 && res.statusText === 'OK';
+    const firstName = data.get('firstName');
+    const lastName = data.get('lastName');
+    const user_name = data.get('user_name');
+    const phoneNumber = data.get('phoneNumber');
 
-//   if (!resOK) {
-//     console.log(res.data);
-//     throw json({ message: 'Could not authenticate user.' }, { status: 500 });
-//   }
-//   const _id = res.data._id;
+    console.log(firstName);
+    console.log(lastName);
+    console.log(user_name);
+    console.log(phoneNumber);
 
-//   const initUser = {
-//     _id,
-//     points: 0,
-//     subjects: {},
-//     totalHours: 0,
-//     totalGpa: 0,
-//     isAdmin: false,
-//   };
-//   mode === 'login' ? getUser(_id) : updateUser(initUser);
+    if (!hasMinLength(firstName, 3)) errorMessages.push('firstName is Short.');
+    if (!hasMinLength(lastName, 3)) errorMessages.push('lastName is Short.');
+    if (!hasMinLength(user_name, 3)) errorMessages.push('user_name is Short.');
+    if (!isValidPhoneNumber(phoneNumber) || phoneNumber.length != 11)
+      errorMessages.push('phoneNumber is not Valid.');
 
-//   localStorage.setItem('user', JSON.stringify(initUser));
+    const registerData = {
+      firstName,
+      lastName,
+      user_name,
+      phoneNumber,
+    };
 
-//   return redirect(mode === 'login' ? '/' : '/userdata');
-// }
+    authData = { ...authData, ...registerData };
+  }
+
+  if (errorMessages.length != 0) {
+    return { messages: errorMessages, status: 400 };
+  }
+
+  const res = await fetch(
+    `${import.meta.env.VITE_URL}/Account/${
+      mode === 'signup' ? 'Register' : 'Login'
+    }`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(authData),
+    }
+  );
+
+  errorMessages = ['Failed to authenticate user.'];
+
+  if (!res.ok) {
+    const contentType = res.headers.get('content-type');
+
+    if (contentType && contentType.includes('application/json')) {
+      const errorData = await res.json();
+      if (errorData.errors) {
+        errorMessages = Object.values(errorData.errors).flat();
+      } else if (errorData.title) {
+        errorMessages = [errorData.title];
+      }
+    } else {
+      let text = await res.text();
+      try {
+        text = JSON.parse(text);
+        errorMessages = Object.values(text?.errors).flat();
+      } catch (error) {
+        errorMessages = text.split(',');
+      }
+    }
+
+    return {
+      messages: errorMessages,
+      status: res.status,
+    };
+  }
+
+  const resData = await res.json();
+
+  localStorage.setItem('token', resData.token);
+  localStorage.setItem('refreshToken', resData.refreshToken);
+  localStorage.setItem('id', resData.id);
+  localStorage.setItem('role', resData.role);
+
+  const hourlyInterval = setInterval(performHourlyTask, 330000);
+
+  localStorage.setItem('hourlyIntervalId', hourlyInterval);
+
+  throw redirect('/');
+}

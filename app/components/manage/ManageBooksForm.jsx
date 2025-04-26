@@ -1,83 +1,118 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { Form, useNavigation } from 'react-router';
 
-function ManageBooksForm() {
+function ManageBooksForm({ selectedBook, cancelUpdate }) {
+  const [formData, setFormData] = useState({
+    title: '',
+    author: '',
+    publicationYear: '',
+    category: '',
+    numberOfCopies: '',
+    availableCopies: '',
+    CoverUrl: null,
+    CoverName: '',
+  });
+
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === 'submitting';
+
+  useEffect(() => {
+    if (selectedBook) {
+      setFormData({
+        title: selectedBook.title || '',
+        author: selectedBook.author || '',
+        publicationYear: selectedBook.publicationYear || '',
+        category: selectedBook.category || '',
+        numberOfCopies: selectedBook.numberOfCopies || '',
+        availableCopies: selectedBook.availableCopies || '',
+        coverUrl: selectedBook.coverUrl || '',
+      });
+    } else {
+      setFormData({
+        title: '',
+        author: '',
+        publicationYear: '',
+        category: '',
+        numberOfCopies: '',
+        availableCopies: '',
+        coverUrl: '',
+      });
+    }
+  }, [selectedBook]);
+
+  function handleChange(e) {
+    const { id, value, files } = e.target;
+
+    setFormData(prev => ({
+      ...prev,
+      [id]: files && files.length > 0 ? files[0] : value,
+    }));
+  }
+
   return (
-    <div class="py-5 min-h-screen flex flex-col items-center justify-center">
-      <h1 class="text-4xl font-bold text-center mb-8 text-[#e5e5e5]">
-        Manage Books
+    <div className="py-5 min-h-screen flex flex-col items-center justify-center">
+      <h1 className="text-4xl font-bold text-center mb-8 text-[#e5e5e5]">
+        {selectedBook ? 'Update Book' : 'Add Book'}
       </h1>
-      <div class="bg-[#e5e5e5] p-8 rounded-xl shadow-lg w-full max-w-[66%]">
-        <form class="space-y-6">
-          <div>
-            <label for="title" class="labelStyle">
-              Title:
-            </label>
-            <input type="text" id="title" required class="inputStyle" />
-          </div>
 
-          <div>
-            <label for="author" class="labelStyle">
-              Author:
-            </label>
-            <input type="text" id="author" required class="inputStyle" />
-          </div>
+      <div className="bg-[#e5e5e5] p-8 rounded-xl shadow-lg w-full max-w-[66%]">
+        <Form method="post" encType="multipart/form-data" className="space-y-6">
+          {/* If editing, send id hidden */}
+          {selectedBook && (
+            <input type="hidden" name="id" value={selectedBook.id} />
+          )}
 
-          <div>
-            <label for="publicationYear" class="labelStyle">
-              Publication Year:
-            </label>
-            <input
-              type="text"
-              id="publicationYear"
-              required
-              class="inputStyle"
-            />
-          </div>
+          {/* Normal Fields */}
+          {[
+            { id: 'title', label: 'Title', type: 'text' },
+            { id: 'author', label: 'Author', type: 'text' },
+            { id: 'publicationYear', label: 'Publication Year', type: 'text' },
+            { id: 'category', label: 'Category', type: 'text' },
+            { id: 'numberOfCopies', label: 'Number of Copies', type: 'number' },
+            {
+              id: 'availableCopies',
+              label: 'Available Copies',
+              type: 'number',
+            },
+            { id: 'CoverUrl', label: 'Cover URL', type: 'file' },
+            { id: 'CoverName', label: 'Cover Name', type: 'text' },
+          ].map(({ id, label, type }) => (
+            <div key={id}>
+              <label htmlFor={id} className="labelStyle">
+                {label}:
+              </label>
+              <input
+                id={id}
+                name={id}
+                type={type}
+                onChange={handleChange}
+                required
+                className="inputStyle"
+                {...(type !== 'file' ? { value: formData[id] } : {})}
+              />
+            </div>
+          ))}
 
-          <div>
-            <label for="category" class="labelStyle">
-              Category:
-            </label>
-            <input type="text" id="category" required class="inputStyle" />
-          </div>
-
-          <div>
-            <label for="numberOfCopies" class="labelStyle">
-              Number of Copies:
-            </label>
-            <input
-              type="number"
-              id="numberOfCopies"
-              required
-              class="inputStyle"
-            />
-          </div>
-
-          <div>
-            <label for="availableCopies" class="labelStyle">
-              Available Copies:
-            </label>
-            <input
-              type="number"
-              id="availableCopies"
-              required
-              class="inputStyle"
-            />
-          </div>
-
-          <div>
-            <label for="coverUrl" class="labelStyle">
-              Cover URL:
-            </label>
-            <input type="file" id="coverUrl" required class="inputStyle" />
-          </div>
-
-          <div class="flex justify-center">
-            <button type="button" id="addUpdateButton" class="buttonStyle">
-              Add
+          <div className="flex md:flex-row flex-col gap-2 justify-center">
+            {selectedBook && (
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                onClick={cancelUpdate}
+                className="buttonStyle"
+              >
+                cancel
+              </button>
+            )}
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="buttonStyle"
+            >
+              {isSubmitting ? 'Saving...' : selectedBook ? 'Update' : 'Add'}
             </button>
           </div>
-        </form>
+        </Form>
       </div>
     </div>
   );

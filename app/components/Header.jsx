@@ -1,14 +1,26 @@
-import { NavLink } from 'react-router';
-import { useState } from 'react';
+import { NavLink, useLocation } from 'react-router';
+import { useState, useEffect } from 'react';
 import AuthButton from './AuthButton';
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isLogin, setIsLogin] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const location = useLocation();
 
   const def = 'font-medium hover:text-[#ffa91e] transition ';
   const active = def + 'text-[#ffa91e]';
   const notActive = def + 'text-white';
-  let isLogin = false;
+
+  useEffect(() => {
+    const id = localStorage.getItem('id');
+    setIsLogin(!!id);
+
+    const role = localStorage.getItem('role');
+    if (role) {
+      setIsAdmin(localStorage.getItem('role') === 'Admin');
+    }
+  }, [location]);
 
   return (
     <nav className="sticky top-0 w-full bg-[#14213D] z-50">
@@ -48,12 +60,14 @@ export default function Header() {
               >
                 Home
               </NavLink>
-              <NavLink
-                to="/manage"
-                className={({ isActive }) => (isActive ? active : notActive)}
-              >
-                Manage
-              </NavLink>
+              {isAdmin ? (
+                <NavLink
+                  to="/manage"
+                  className={({ isActive }) => (isActive ? active : notActive)}
+                >
+                  Manage
+                </NavLink>
+              ) : null}
             </div>
           ) : null}
 

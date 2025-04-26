@@ -1,4 +1,5 @@
 import React from 'react';
+import { logout } from '../../util/Tokens';
 
 function ProfileInfo() {
   return (
@@ -34,10 +35,13 @@ function ProfileInfo() {
         </div>
 
         <div className="flex flex-col md:flex-row justify-center gap-3 mt-6">
-          <button className="bg-[#ffa91e] hover:bg-[#e6981a] w-full md:w-24 text-white font-medium px-5 py-2 rounded-full text-sm">
+          {/* <button className="bg-[#ffa91e] hover:bg-[#e6981a] w-full md:w-24 text-white font-medium px-5 py-2 rounded-full text-sm">
             Edit
-          </button>
-          <button className="border w-full md:w-24 text-xs border-[#b31010] text-[#b31010] hover:bg-[#b31010] hover:text-white font-medium px-5 py-2 rounded-full">
+          </button> */}
+          <button
+            onClick={logout}
+            className="border w-full md:w-24 text-xs border-[#b31010] text-[#b31010] hover:bg-[#b31010] hover:text-white font-medium px-5 py-2 rounded-full"
+          >
             Sign out
           </button>
         </div>

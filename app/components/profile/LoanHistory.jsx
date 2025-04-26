@@ -1,30 +1,10 @@
 import React from 'react';
 import LoanTableRow from './LoanTableRow.jsx';
+import { useLoaderData } from 'react-router';
 
 function LoanHistory() {
-  let loans = [
-    {
-      src: 'https://m.media-amazon.com/images/I/61HkdyBpKOL._AC_UF1000,1000_QL80_.jpg',
-      alt: '1984',
-      author: 'by George Orwell',
-      loanDate: '2024-03-01',
-      returnDate: '2024-03-21',
-    },
-    {
-      src: 'https://m.media-amazon.com/images/I/41as+WafrFL.jpg',
-      alt: 'Clean Code',
-      author: 'by Robert C. Martin',
-      loanDate: '2024-04-10',
-      returnDate: '2024-05-01',
-    },
-    {
-      src: 'https://cdn2.penguin.com.au/covers/original/9781718502062.jpg',
-      alt: 'Object-Oriented Python',
-      author: 'by Irv Kalb - Penguin',
-      loanDate: '2024-04-10',
-      returnDate: '2024-05-01',
-    },
-  ];
+  let data = useLoaderData();
+  let loans = data.loans;
 
   return (
     <div className="col-span-2">

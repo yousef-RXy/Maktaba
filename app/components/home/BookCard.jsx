@@ -1,18 +1,31 @@
 import React from 'react';
+import { addLoan } from '../../util/http';
+import { useNavigate } from 'react-router';
 
 const BookCard = ({
-  image,
+  id,
+  coverUrl,
   title,
   author,
   publicationYear,
   category,
-  availability,
+  availableCopies,
 }) => {
+  const navigate = useNavigate();
+
+  async function AddLoan() {
+    let userId = localStorage.getItem('id');
+    if (userId && id) {
+      await addLoan(userId, id);
+      navigate('/');
+    }
+  }
+
   return (
     <div className="col mb-5">
       <div className="card shadow-lg rounded-lg overflow-hidden bg-[#e5e5e5]">
-        <div className=" h-[280px] overflow-hidden m-1 rounded-l">
-          <img className="w-full object-cover" src={image} alt={title} />
+        <div className=" h-[160px] overflow-hidden m-1 rounded">
+          <img className="w-full object-cover" src={coverUrl} alt={title} />
         </div>
 
         {/* Product details */}
@@ -26,13 +39,15 @@ const BookCard = ({
             Category : <span className="font-semibold">{category}</span>
           </h6>
           <h6 className="text-gray-700">
-            Available : <span className="font-bold">{availability}</span>
+            Available : <span className="font-bold">{availableCopies}</span>
           </h6>
         </div>
 
         {/* Product actions */}
         <div className="p-4 pt-0  bg-transparent flex justify-center">
-          <button className="buttonStyle">Loan</button>
+          <button onClick={AddLoan} className="buttonStyle">
+            Loan
+          </button>
         </div>
       </div>
     </div>
