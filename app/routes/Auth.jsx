@@ -1,11 +1,11 @@
-import axios from 'axios';
-import { redirect } from 'react-router';
+// import axios from 'axios';
+// import { redirect } from 'react-router';
 import AuthForm from '../components/auth/AuthForm';
-import {
-  hasMinLength,
-  isEqualsToOtherValue,
-  isNotEmpty,
-} from '../util/validation';
+// import {
+//   hasMinLength,
+//   isEqualsToOtherValue,
+//   isNotEmpty,
+// } from '../util/validation';
 
 export default function AuthenticationPage() {
   return <AuthForm />;
