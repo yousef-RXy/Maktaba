@@ -8,9 +8,9 @@ export function meta({}) {
   ];
 }
 
-export default function profile() {
+export default function Profile() {
   return (
-    <div className="container mx-auto pt-4 px-24">
+    <div className="container mx-auto pt-4 px-4 md:px-24">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <ProfileInfo />
         <LoanHistory />

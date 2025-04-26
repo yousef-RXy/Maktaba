@@ -1,6 +1,5 @@
 import React from 'react';
-
-import Loan_Table_Row from './LoanTableRow.jsx';
+import LoanTableRow from './LoanTableRow.jsx';
 
 function LoanHistory() {
   let loans = [
@@ -34,9 +33,9 @@ function LoanHistory() {
           Loan History
         </div>
 
-        <div className="p-6 bg-transparent">
-          <div className="overflow-hidden rounded-xl border border-gray-200">
-            <table className="min-w-full table-auto text-sm">
+        <div className="p-4 md:p-6 bg-transparent">
+          <div className="overflow-x-auto rounded-xl border border-gray-200">
+            <table className="min-w-full table-auto text-xs md:text-sm">
               <thead className="bg-white text-gray-700 font-semibold">
                 <tr>
                   <th className="px-6 py-4 text-center">Book</th>
@@ -45,8 +44,8 @@ function LoanHistory() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {loans?.map(i => (
-                  <Loan_Table_Row {...i} />
+                {loans?.map((i, idx) => (
+                  <LoanTableRow key={idx} {...i} />
                 ))}
               </tbody>
             </table>
