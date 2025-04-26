@@ -15,11 +15,11 @@ body {
 }
 
 .inputStyle {
-  @apply w-full border border-gray-300 h-8 p-5 rounded-lg focus:outline-none hover:ring-1 hover:bg-[#ffa91e] hover:ring-black focus:ring-1 focus:bg-[#ffa91e] focus:ring-black text-black;
+  @apply w-full shadow border border-gray-300 h-8 p-5 rounded-lg focus:outline-none hover:ring-1 hover:bg-[#ffa91e] hover:ring-black focus:ring-1 focus:bg-[#ffa91e] focus:ring-black text-black;
 }
 .labelStyle {
   @apply block text-gray-700 font-semibold mb-2;
 }
 .buttonStyle {
-  @apply bg-[#ffa91e] hover:bg-[#e6981a] text-[#14213d] font-bold py-3 px-8 rounded-lg transition duration-300;
+  @apply bg-[#ffa91e] hover:bg-[#e6981a] text-white font-bold py-3 w-full md:w-36 rounded-lg transition duration-300;
 }
