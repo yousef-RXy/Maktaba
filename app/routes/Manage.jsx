@@ -14,7 +14,8 @@ export default function Home() {
 
   useEffect(() => {
     const role = localStorage.getItem('role');
-    if (role && role !== 'Admin') {
+    console.log(role);
+    if (role || role !== 'Admin') {
       navigate('/');
     }
   }, []);
@@ -70,7 +71,7 @@ export async function clientAction({ request }) {
 
   const url = id
     ? `${import.meta.env.VITE_URL}/Books/UpdateBook/${id}`
-    : `${import.meta.env.VITE_URL}/Books/AddBook`; // 👈 if id exists, Update
+    : `${import.meta.env.VITE_URL}/Books/AddBook`;
 
   const res = await fetch(url, {
     method: id ? 'PUT' : 'POST',

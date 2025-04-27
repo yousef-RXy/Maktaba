@@ -10,6 +10,7 @@ import {
 import type { Route } from './+types/root';
 
 import Header from './components/Header.jsx';
+import { logout } from './util/Tokens';
 
 import './app.css';
 
@@ -46,6 +47,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
+  const exp = localStorage.getItem('exp');
+  if (!!exp && Date.now() >= Number(exp)) {
+    logout();
+  }
+
   return (
     <>
       <Outlet />

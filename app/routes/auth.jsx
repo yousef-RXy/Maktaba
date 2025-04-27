@@ -6,7 +6,7 @@ import {
   isNotEmpty,
   isValidPhoneNumber,
 } from '../util/validation';
-import { performHourlyTask } from '../util/Tokens';
+import { decodeJWT, logout, performHourlyTask } from '../util/Tokens';
 
 export default function AuthenticationPage() {
   return <AuthForm />;
@@ -107,15 +107,7 @@ export async function clientAction({ request }) {
   }
 
   const resData = await res.json();
-
-  localStorage.setItem('token', resData.token);
-  localStorage.setItem('refreshToken', resData.refreshToken);
-  localStorage.setItem('id', resData.id);
-  localStorage.setItem('role', resData.role);
-
-  const hourlyInterval = setInterval(performHourlyTask, 330000);
-
-  localStorage.setItem('hourlyIntervalId', hourlyInterval);
+  decodeJWT(resData.token, resData.refreshToken);
 
   throw redirect('/');
 }
