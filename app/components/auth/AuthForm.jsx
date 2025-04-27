@@ -5,6 +5,7 @@ import {
   useActionData,
   useNavigation,
 } from 'react-router';
+import { toast, Toaster } from 'sonner';
 
 function AuthForm() {
   const data = useActionData();
@@ -13,18 +14,19 @@ function AuthForm() {
   const isSignup = searchParams.get('mode') === 'signup';
   const isSubmitting = navigation.state === 'submitting';
 
+  if (data && data.messages) {
+    data.messages.map(msg => toast.error(msg));
+  }
+
   return (
     <>
-      <div class="py-5 flex flex-col items-center justify-center">
-        <h1 class="text-4xl font-bold text-center mb-8 text-[#e5e5e5]">
+      <Toaster richColors closeButton="true" />
+      <div className="py-5 flex flex-col items-center justify-center">
+        <h1 className="text-4xl font-bold text-center mb-8 text-[#e5e5e5]">
           {!isSignup ? 'Log in' : 'Create a new user'}
         </h1>
-        <div class="bg-[#e5e5e5] p-8 rounded-xl shadow-lg w-full max-w-[66%]">
+        <div className="bg-[#e5e5e5] p-8 rounded-xl shadow-lg w-full max-w-[66%]">
           <Form method="post" className="space-y-6">
-            {data &&
-              data.messages &&
-              data.messages.map(msg => <p className="mb-4">{msg}</p>)}
-
             <p className="mb-4">
               <label htmlFor="email" className="labelStyle">
                 Email

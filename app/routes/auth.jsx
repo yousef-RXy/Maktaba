@@ -45,11 +45,6 @@ export async function clientAction({ request }) {
     const user_name = data.get('user_name');
     const phoneNumber = data.get('phoneNumber');
 
-    console.log(firstName);
-    console.log(lastName);
-    console.log(user_name);
-    console.log(phoneNumber);
-
     if (!hasMinLength(firstName, 3)) errorMessages.push('firstName is Short.');
     if (!hasMinLength(lastName, 3)) errorMessages.push('lastName is Short.');
     if (!hasMinLength(user_name, 3)) errorMessages.push('user_name is Short.');

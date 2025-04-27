@@ -101,7 +101,7 @@ export async function clientAction({ request }) {
     }
 
     if (errorMessages[0] === '') {
-      errorMessages = 'Failed To add Book.';
+      errorMessages = ['Failed To add Book.'];
     }
 
     return {

@@ -9,7 +9,7 @@ function AuthButton({ text, className, to }) {
     <Link
       to={to}
       className={clsx(
-        'px-3 py-1 border rounded transition font-bold hover:text-white',
+        'px-3 py-1 min-w-24 text-center border rounded transition font-bold hover:text-white',
         styles
       )}
     >

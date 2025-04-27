@@ -1,15 +1,6 @@
 export async function performHourlyTask() {
-  console.log('start');
-
   const jwtToken = localStorage.getItem('token');
   const refreshToken = localStorage.getItem('refreshToken');
-
-  console.log(
-    JSON.stringify({
-      jwtToken,
-      refreshToken,
-    })
-  );
 
   const res = await fetch(`${import.meta.env.VITE_URL}/Account/RefreshToken`, {
     method: 'POST',
@@ -32,7 +23,6 @@ export async function performHourlyTask() {
   }
 
   const resData = await res.json();
-  console.log(resData);
 
   localStorage.setItem('token', resData.token);
   localStorage.setItem('refreshToken', resData.refreshToken);

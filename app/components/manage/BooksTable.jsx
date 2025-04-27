@@ -11,7 +11,7 @@ function BooksTable({ books, onUpdate }) {
   }
 
   return (
-    <div className="py-10">
+    <div className="py-10 px-5">
       <div className="container mx-auto">
         {/* <div className="w-3/4 mx-auto mb-8">
           <input

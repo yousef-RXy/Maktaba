@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Form, useNavigation } from 'react-router';
+import { Form, useActionData, useNavigation } from 'react-router';
+import { toast, Toaster } from 'sonner';
 
 function ManageBooksForm({ selectedBook, cancelUpdate }) {
+  const data = useActionData();
   const [formData, setFormData] = useState({
     title: '',
     author: '',
@@ -15,6 +17,10 @@ function ManageBooksForm({ selectedBook, cancelUpdate }) {
 
   const navigation = useNavigation();
   const isSubmitting = navigation.state === 'submitting';
+
+  if (data && data.messages) {
+    data.messages.map(msg => toast.error(msg));
+  }
 
   useEffect(() => {
     if (selectedBook) {
@@ -51,11 +57,12 @@ function ManageBooksForm({ selectedBook, cancelUpdate }) {
 
   return (
     <div className="py-5 min-h-screen flex flex-col items-center justify-center">
+      <Toaster richColors closeButton="true" />
       <h1 className="text-4xl font-bold text-center mb-8 text-[#e5e5e5]">
         {selectedBook ? 'Update Book' : 'Add Book'}
       </h1>
 
-      <div className="bg-[#e5e5e5] p-8 rounded-xl shadow-lg w-full max-w-[66%]">
+      <div className="bg-[#e5e5e5] p-8 rounded-xl shadow-lg w-full max-w-[80%]">
         <Form method="post" encType="multipart/form-data" className="space-y-6">
           {/* If editing, send id hidden */}
           {selectedBook && (

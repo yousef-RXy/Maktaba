@@ -49,7 +49,7 @@ export default function Header() {
         <div
           className={`${
             menuOpen ? 'flex' : 'hidden'
-          } absolute top-full left-0 w-full bg-[#14213D] flex-col items-center gap-4 py-4 md:flex md:static md:flex-row md:bg-transparent md:w-auto md:py-0`}
+          } absolute drop-shadow-2xl shadow-2xl top-full left-0 w-full bg-[#14213D] flex-col items-center gap-4 py-4 md:flex md:static md:flex-row md:bg-transparent md:w-auto md:py-0`}
         >
           {/* Navigation Links */}
           {isLogin ? (
@@ -68,12 +68,15 @@ export default function Header() {
                   Manage
                 </NavLink>
               ) : null}
+              <NavLink to="/profile" className="md:hidden">
+                profile
+              </NavLink>
             </div>
           ) : null}
 
           {/* Auth Buttons */}
           {isLogin ? (
-            <div className="flex items-center gap-4 mt-4 md:mt-0">
+            <div className="items-center gap-4 mt-4 md:mt-0 hidden md:flex">
               {/* <AuthButton
                 text="Logout"
                 className="border-[#dc3545] text-[#dc3545] hover:bg-[#dc3545]"
@@ -87,7 +90,7 @@ export default function Header() {
               </NavLink>
             </div>
           ) : (
-            <div className="flex items-center gap-4 mt-4 md:mt-0">
+            <div className="flex md:flex-row flex-col items-center gap-4 mt-4 md:mt-0">
               <AuthButton text="Login" to="/auth?mode=login" />
               <AuthButton text="Register" to="/auth?mode=register" />
             </div>
