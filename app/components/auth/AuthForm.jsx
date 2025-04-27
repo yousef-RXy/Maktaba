@@ -11,7 +11,7 @@ function AuthForm() {
   const data = useActionData();
   const navigation = useNavigation();
   const [searchParams] = useSearchParams();
-  const isSignup = searchParams.get('mode') === 'signup';
+  const isSignup = searchParams.get('mode') === 'register';
   const isSubmitting = navigation.state === 'submitting';
 
   if (data && data.messages) {
@@ -126,7 +126,7 @@ function AuthForm() {
 
             <div className="flex flex-col gap-4 justify-center items-center mt-4 md:flex-row">
               <Link
-                to={`?mode=${!isSignup ? 'signup' : 'login'}`}
+                to={`?mode=${!isSignup ? 'register' : 'login'}`}
                 className={`${
                   !isSignup ? 'text-s' : ''
                 } buttonStyle text-center`}

@@ -13,6 +13,7 @@ import Header from './components/Header.jsx';
 import { logout } from './util/Tokens';
 
 import './app.css';
+import { useEffect } from 'react';
 
 export const links: Route.LinksFunction = () => [
   { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
@@ -47,10 +48,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  const exp = localStorage.getItem('exp');
-  if (!!exp && Date.now() >= Number(exp)) {
-    logout();
-  }
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const exp = localStorage.getItem('exp');
+      if (!!exp && Date.now() >= Number(exp)) {
+        logout();
+      }
+    }
+  }, []);
 
   return (
     <>

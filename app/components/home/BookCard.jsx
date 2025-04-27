@@ -1,6 +1,7 @@
 import React from 'react';
 import { addLoan } from '../../util/http';
 import { useNavigate } from 'react-router';
+import { toast, Toaster } from 'sonner';
 
 const BookCard = ({
   id,
@@ -13,16 +14,19 @@ const BookCard = ({
 }) => {
   const navigate = useNavigate();
 
-  async function AddLoan() {
+  async function AddLoanButton() {
     let userId = localStorage.getItem('id');
     if (userId && id) {
       await addLoan(userId, id);
       navigate('/');
+    } else {
+      toast.error('You have to login to loan a book');
     }
   }
 
   return (
     <div className="col mb-5">
+      <Toaster richColors closeButton="true" />
       <div className="card shadow-lg rounded-lg overflow-hidden bg-[#e5e5e5]">
         <div className=" h-[160px] overflow-hidden m-1 rounded">
           <img className="w-full object-cover" src={coverUrl} alt={title} />
@@ -45,7 +49,7 @@ const BookCard = ({
 
         {/* Product actions */}
         <div className="p-4 pt-0  bg-transparent flex justify-center">
-          <button onClick={AddLoan} className="buttonStyle">
+          <button onClick={AddLoanButton} className="buttonStyle">
             Loan
           </button>
         </div>
