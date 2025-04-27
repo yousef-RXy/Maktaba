@@ -1,7 +1,9 @@
 import React from 'react';
 import { logout } from '../../util/Tokens';
+import { useLoaderData } from 'react-router';
 
 function ProfileInfo() {
+  const { user } = useLoaderData();
   return (
     <div className="col-span-1">
       <div className="card bg-[#e5e5e5] text-center shadow-md rounded-lg p-4 md:p-6">
@@ -11,26 +13,23 @@ function ProfileInfo() {
           className="rounded-full mb-4 w-20 h-20 md:w-24 md:h-24 object-cover mx-auto"
         />
         <h4 className="text-[#14213d] font-bold text-xl md:text-2xl mb-2">
-          Naden Mohamed Yasen
+          {user.user_name}
         </h4>
 
         <hr className="my-4 md:my-6 opacity-30 text-[#14213d]" />
 
         <div className="text-[#14213d] text-left space-y-2 text-sm md:text-base">
           <p>
-            <strong>Full Name:</strong> Naden Mohamed
+            <strong>Full Name:</strong> {user.firstName}
           </p>
           <p>
-            <strong>Email:</strong> naden@email.com
+            <strong>Last Name:</strong> {user.lastName}
           </p>
           <p>
-            <strong>Phone:</strong> (239) 816-9029
+            <strong>Email:</strong> {user.email}
           </p>
           <p>
-            <strong>Mobile:</strong> (320) 380-4539
-          </p>
-          <p>
-            <strong>Address:</strong> Bay Area, San Francisco, CA
+            <strong>Phone:</strong> {user.phoneNumber}
           </p>
         </div>
 

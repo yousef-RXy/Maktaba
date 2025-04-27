@@ -30,18 +30,18 @@ export async function clientLoader() {
     }
   );
 
-  // const userRes = await fetch(
-  //   `${import.meta.env.VITE_URL}/Account/GetById?id=${id}`,
-  //   {
-  //     headers: {
-  //       Authorization: `Bearer ${JWT}`,
-  //     },
-  //   }
-  // );
+  const userRes = await fetch(
+    `${import.meta.env.VITE_URL}/Account/GetById?id=${id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${JWT}`,
+      },
+    }
+  );
 
   const resData = {};
   resData.loans = await loansRes.json();
-  // resData.user = await userRes.json();
+  resData.user = await userRes.json();
 
   return resData;
 }
